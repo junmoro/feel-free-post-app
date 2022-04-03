@@ -1,10 +1,13 @@
 FROM golang:alpine
 
+RUN apk update &&  apk add git
+
 COPY ./go-app /app/go
 
 WORKDIR /app/go
 
-RUN go build -o main . 
+RUN go mod tidy
+RUN go install github.com/cosmtrek/air@v1.27.3
 
 ENV CGO_ENABLED=0 \
     GOOS=linux \
@@ -12,4 +15,4 @@ ENV CGO_ENABLED=0 \
 
 EXPOSE 8000
 
-CMD ["/app/go/main"]
+CMD [ "/app/go/main" ]

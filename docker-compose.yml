@@ -19,6 +19,9 @@ services:
     ports:
       - 8000:8000
     tty: true
+    command: "air -c .air.toml"
+    volumes:
+      - ./go-app:/app/go
   nginx:
     image: nginx
     container_name: nginx_container
@@ -34,6 +37,8 @@ services:
       dockerfile: ./docker/mysql/Dockerfile
     container_name: mysql_container
     environment:
+      MYSQL_USER: 'webuser'
+      MYSQL_PASSWORD: 'webpass'
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: react-go-app
       TZ: 'Asia/Tokyo'

@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/junmoro/feel-free-post-app/go-app/database"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -25,5 +26,13 @@ func createMux() *echo.Echo {
 }
 
 func articleIndex(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+	database.Connect()
+	sqlDB, _ := database.DB.DB()
+	defer sqlDB.Close()
+	err := sqlDB.Ping()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "データベース接続失敗")
+	} else {
+		return c.String(http.StatusOK, "Hello, World!")
+	}
 }
